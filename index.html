@@ -219,6 +219,7 @@ textarea.ta:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary
 .fi:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
 #net{position:sticky;top:56px;z-index:39;background:var(--optional-soft);color:var(--optional-ink);font-size:13px;font-weight:600;padding:8px 20px;text-align:center}
 #net[hidden]{display:none}
+@keyframes spin{to{transform:rotate(360deg)}}.ib.spin svg{animation:spin 1s linear infinite}
 @media (pointer:coarse){.search,textarea.ta,.mbox input{font-size:16px}.sw{width:42px;height:42px}}
 @media (max-width:1100px){.rd{grid-template-columns:0 minmax(0,1fr) 340px}.rd.nopanel{grid-template-columns:0 minmax(0,1fr) 0}.toc{display:none}.rd.showtoc .toc{display:block;position:fixed;left:0;width:280px;z-index:45;box-shadow:var(--shadow-window)}}
 @media (max-width:900px){.rd,.rd.nopanel{grid-template-columns:minmax(0,1fr)}.kp,.rd.nopanel .kp{display:flex;position:fixed;right:0;top:56px;width:min(380px,100%);z-index:44;box-shadow:var(--shadow-window);transform:translateX(105%);transition:transform .35s var(--ease)}.rd.showpanel .kp{transform:none}}
@@ -239,12 +240,12 @@ const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelecto
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const nowISO=()=>new Date().toISOString();
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
-const fmtDate=s=>{try{return new Date(s).toLocaleDateString(undefined,{day:'numeric',month:'short'})}catch(e){return''}};
+const fmtDate=s=>{const d=new Date(s);return s&&!isNaN(d)?d.toLocaleDateString(undefined,{day:'numeric',month:'short'}):''};
 const COL={y:{label:'Mildly important',d:'var(--dot-y)'},g:{label:'More important',d:'var(--dot-g)'},p:{label:'Life-changing',d:'var(--dot-p)'},v:{label:'Key term',d:'var(--dot-v)'}};
 const ORDER=['y','g','p','v'];
 const COVERS=[['var(--mains-soft)','var(--mains-ink)'],['var(--prelims-soft)','var(--prelims-ink)'],['var(--optional-soft)','var(--optional-ink)'],['var(--interview-soft)','var(--interview-ink)'],['var(--ifos-soft)','var(--ifos-ink)']];
 const WPP=300,PINKMAX=4;
-const ICON={back:'<svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>',panel:'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16"/></svg>',toc:'<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',check:'<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',more:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>',note:'<svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4z"/></svg>'};
+const ICON={gear:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',sync:'<svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 1-15.5 6.2M3 12A9 9 0 0 1 18.5 5.8"/><path d="M18.5 2v3.8h-3.8M5.5 22v-3.8h3.8"/></svg>',back:'<svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>',panel:'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16"/></svg>',toc:'<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',check:'<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',more:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>',note:'<svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4z"/></svg>'};
 
 /* ---------- prefs (per browser, UI only) ---------- */
 const pref=(k,v)=>{try{if(v===undefined)return JSON.parse(localStorage.getItem('gslm2:'+k)||'null');localStorage.setItem('gslm2:'+k,JSON.stringify(v))}catch(e){return null}};
@@ -327,10 +328,10 @@ function route(){closeFloats();const m=location.hash.match(/^#\/book\/(.+)$/);co
 let BK=null;
 function header(){const h=$('#hdr');
   const ro='';
-  if(!BK){h.innerHTML=`<a class="logo" href="#/"><i>G</i><span>GS Learning Machine</span></a><span class="sp"></span><span class="status" id="status"></span>${ro}${REPO()?`<button class="btn sm ghost" id="chg">${esc(REPO())}</button>`:''}`}
+  if(!BK){h.innerHTML=`<a class="logo" href="#/"><i>G</i><span>GS Learning Machine</span></a><span class="sp"></span><span class="status" id="status"></span>${ro}${REPO()?`<button class="ib" id="syncBtn" title="Sync now">${ICON.sync}</button><button class="ib" id="setBtn" title="Settings">${ICON.gear}</button>`:''}`}
   else{h.innerHTML=`<a class="ib" href="#/" title="Library">${ICON.back}</a><button class="ib" id="tocBtn" title="Contents">${ICON.toc}</button><div class="crumb"><a href="#/">Library</a><span>/</span><b>${esc(BK.data.title)}</b></div><span class="sp"></span><span class="status" id="status"></span><span class="eyebrow num" id="pct"></span>${ro}
-    <button class="btn sm ghost" id="aMinus" title="Smaller text">A−</button><button class="btn sm ghost" id="aPlus" title="Larger text">A+</button><button class="ib ${pref('panel')===false?'':'on'}" id="pnlBtn" title="Knowtes panel">${ICON.panel}</button>`}
-  const c=$('#chg');if(c)c.onclick=settings;
+    <button class="btn sm ghost" id="aMinus" title="Smaller text">A−</button><button class="btn sm ghost" id="aPlus" title="Larger text">A+</button><button class="ib ${pref('panel')===false?'':'on'}" id="pnlBtn" title="Knowtes panel">${ICON.panel}</button><button class="ib" id="syncBtn" title="Sync now">${ICON.sync}</button><button class="ib" id="setBtn" title="Settings">${ICON.gear}</button>`}
+  const sb=$('#setBtn');if(sb)sb.onclick=settings;const sy=$('#syncBtn');if(sy)sy.onclick=syncNow;
   if(BK){$('#aMinus').onclick=()=>size(-1);$('#aPlus').onclick=()=>size(1);$('#pnlBtn').onclick=()=>{if(innerWidth<=900){$('.rd').classList.toggle('showpanel');return}const on=pref('panel')!==false;pref('panel',!on);$('.rd').classList.toggle('nopanel',on);$('#pnlBtn').classList.toggle('on',!on)};$('#tocBtn').onclick=()=>$('.rd').classList.toggle('showtoc')}}
 function size(d){const s=Math.min(24,Math.max(14,(pref('size')||18)+d));pref('size',s);document.documentElement.style.setProperty('--size',s+'px')}
 
@@ -352,8 +353,10 @@ function connect(failed){BK=null;header();const c=CFG();
     pref('gh',{owner,repo,token});$('#ghGo').textContent='Connecting…';const r=await gh('').catch(e=>null);
     if(!r||!r.ok){$('#ghGo').textContent='Connect';toast(r?(r.status===404?'Repository not found for this token':'GitHub said '+r.status):'Could not reach GitHub');return}
     LIB.books=[];LIB.knotes=[];if(await refresh()){location.hash='#/';route()}else{$('#ghGo').textContent='Connect';toast('Connected, but the library could not be read')}}}
-async function settings(){const v=await ask('Library settings',`Connected to ${REPO()}. Disconnecting removes the token and the offline copy from this browser; your files on GitHub are not touched.`,[['Close',null],['Sync now','sync','out'],['Disconnect','off','pri']]);
-  if(v==='sync'){status('Syncing…');flushAll();if(await refresh()){rerender();status('Up to date')}}
+async function syncNow(){const b=$('#syncBtn');if(b)b.classList.add('spin');status('Syncing…');flushAll();const ok=await refresh();if(b)b.classList.remove('spin');if(ok){rerender();status('Up to date');toast('Library up to date')}else toast('Could not reach GitHub')}
+async function settings(){const v=await ask('Settings',`Library: ${REPO()}. Sync pulls the latest books and knowtes from GitHub (it also happens when you open the app). Disconnect removes the token and offline copy from this browser only; your files on GitHub stay.`,[['Close',null],['Sync now','sync','out'],['Change token','tok','out'],['Disconnect','off','pri']]);
+  if(v==='sync')syncNow();
+  if(v==='tok'){location.hash='';connect()}
   if(v==='off'){if(LIB.knotes.some(k=>k.dirty)&&!(await ask('Unsaved changes','Some changes have not reached GitHub yet. Disconnect anyway?',[['Cancel',null],['Disconnect','y','pri']])))return;
     await kvSet('lib:'+REPO(),null);pref('gh',null);LIB.books=[];LIB.knotes=[];location.hash='';connect()}}
 
@@ -379,7 +382,7 @@ function showLibrary(){BK=null;header();document.title='GS Learning Machine';
 let P={},CH=[],paraEl={},VIS=[],ACT=null,IDX=new Map(),TOTALW=0,tab='knowtes',filt='all',q='';
 function openBook(b){
   BK=b;document.title=b.data.title+' · GS Learning Machine';CH=b.data.chapters;P={};paraEl={};let w=0;
-  CH.forEach((c,ci)=>{c.pids=[];c.paras.forEach((raw,i)=>{const k=typeof raw==='string'?'p':raw.k;let h=typeof raw==='string'?raw:raw.h;const pid=c.key+'-'+i;if(k==='h'){const t=h.replace(/<[^>]+>/g,'');if(/[A-Z]/.test(t)&&t===t.toUpperCase()){const L=h.toLowerCase();h=L.replace(/(^(?:<[^>]+>|[^a-z])*)([a-z])/,(m,a,b)=>a+b.toUpperCase())}}const n=h.replace(/<[^>]+>/g,'').split(/\s+/).filter(Boolean).length;P[pid]={pid,ci,i,k,html:h,w0:w,w};w+=n;c.pids.push(pid)})});TOTALW=w;
+  CH.forEach((c,ci)=>{c.pids=[];c.paras.forEach((raw,i)=>{const k=typeof raw==='string'?'p':raw.k;let h=typeof raw==='string'?raw:raw.h;const pid=c.key+'-'+i;if(k==='h'){const t=h.replace(/<[^>]+>/g,'');if(/[A-Z]/.test(t)&&t===t.toUpperCase()){const L=h.toLowerCase(),cap=x=>x.replace(/^((?:<[^>]+>|[^a-z])*)([a-z])/,(q,a,b)=>a+b.toUpperCase()),rm=L.match(/^((?:<[^>]+>)*)([ivxlc]+\.\s+)/);h=rm?rm[1]+rm[2].toUpperCase()+cap(L.slice(rm[0].length)):cap(L)}}const n=h.replace(/<[^>]+>/g,'').split(/\s+/).filter(Boolean).length;P[pid]={pid,ci,i,k,html:h,w0:w,w};w+=n;c.pids.push(pid)})});TOTALW=w;
   loadVis();header();
   $('#app').innerHTML=`<div class="rd ${pref('panel')===false?'nopanel':''}"><aside class="toc" id="toc"></aside><section class="center"><div id="reader"></div></section><aside class="kp" id="kp"></aside></div>`;
   buildToc();buildReader();renderAll();renderPanel();
