@@ -258,7 +258,7 @@ const CFG=()=>pref('gh')||{};
 const REPO=()=>{const c=CFG();return c.owner&&c.repo?c.owner+'/'+c.repo:''};
 const encPath=p=>p.split('/').map(encodeURIComponent).join('/');
 async function gh(path,opt={}){const c=CFG();
-  return fetch(`https://api.github.com/repos/${c.owner}/${c.repo}/${path}`,Object.assign({cache:'no-store'},opt,{headers:Object.assign({Authorization:'Bearer '+c.token,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'},opt.headers||{})}))}
+  return fetch(`https://api.github.com/repos/${c.owner}/${c.repo}`+(path?'/'+path:''),Object.assign({cache:'no-store'},opt,{headers:Object.assign({Authorization:'Bearer '+c.token,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'},opt.headers||{})}))}
 async function ghErr(r){let m='';try{m=(await r.json()).message}catch(e){}return new Error(r.status+(m?' · '+m:''))}
 async function ghList(dir){const r=await gh('contents/'+dir);if(r.status===404)return[];if(!r.ok)throw await ghErr(r);return(await r.json()).filter(f=>f.type==='file'&&/\.json$/i.test(f.name))}
 async function ghJSON(path){const r=await gh('contents/'+encPath(path),{headers:{Accept:'application/vnd.github.raw+json'}});if(!r.ok)throw await ghErr(r);return JSON.parse(await r.text())}
