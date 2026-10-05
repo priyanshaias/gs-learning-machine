@@ -32,7 +32,7 @@
   --ease:cubic-bezier(.2,.8,.2,1);--size:18px;
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--surface);color:var(--text-strong)}
+html,body{margin:0;background:var(--surface);color:var(--text-strong);-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
 body{font:15px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
 button,input,textarea{font:inherit;color:inherit}
 button{cursor:pointer;background:none;border:0;padding:0}
@@ -94,11 +94,12 @@ a{color:var(--link);text-decoration:none}a:hover{color:var(--link-hover)}
 .connect{max-width:560px;margin:12vh auto 0;padding:0 24px;text-align:left;animation:up .45s var(--ease)}
 .connect h1{font-size:44px;line-height:1.06;font-weight:900;letter-spacing:-.04em;color:var(--ink);margin:18px 0 14px}
 .connect p{font-size:16px;color:var(--text-body);margin:0 0 22px;line-height:1.6}
-.connect .tree{font:13px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--surface-muted);border-radius:12px;padding:14px 18px;color:var(--text-body);margin:0 0 24px;white-space:pre}
+.connect .tree{font:13px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--surface-muted);border-radius:12px;padding:14px 18px;color:var(--text-body);margin:0 0 24px;white-space:pre-wrap;overflow-wrap:anywhere}
 .connect .row{display:flex;gap:10px;flex-wrap:wrap}
 /* reader layout */
 .rd{--l:260px;--r:360px;display:grid;grid-template-columns:var(--l) minmax(0,1fr) var(--r);min-height:calc(100vh - 56px)}
-.rd.notoc{--l:0px}.rd.nopanel{--r:0px}.rd.notoc .toc{display:none}
+.rd.notoc{--l:0px}.rd.nopanel{--r:0px}
+.toc{grid-column:1}.center{grid-column:2;grid-row:1}.kp{grid-column:3;grid-row:1}.rd.notoc .toc{display:none}
 .toc{position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;background:var(--surface-sidebar);border-right:1px solid var(--line);padding:22px 12px 40px}
 .toc .bt{display:flex;gap:6px;align-items:flex-start;padding:0 4px 16px 10px;border-bottom:1px solid var(--line);margin-bottom:10px}
 .toc .bt b{display:block;font-size:17px;font-weight:800;letter-spacing:-.02em;color:var(--ink);line-height:1.2}
@@ -192,7 +193,7 @@ textarea.ta:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary
 .sw .tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:11.5px;font-weight:600;padding:5px 8px;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
 .sw:hover .tip{opacity:1}
 .vsep{width:1px;height:22px;background:var(--line);margin:0 4px}
-#pop{width:340px;padding:14px}
+#pop{width:min(340px,calc(100vw - 20px));padding:14px}
 #pop .q{font:600 14.5px/1.5 var(--serif);color:var(--ink);margin-bottom:10px;max-height:4.5em;overflow:hidden}
 #pop .swr{display:flex;align-items:center;gap:2px;margin-bottom:8px}
 #pop .swr span{font-size:12.5px;color:var(--text-subtle);margin-left:6px}
@@ -212,8 +213,10 @@ textarea.ta:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary
 .mbox input{width:100%;height:40px;border:1px solid var(--border);border-radius:9px;padding:0 12px;font-size:15px;outline:none;margin-bottom:6px}
 .mbox input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
 .mbox .err{font-size:12.5px;color:var(--danger);min-height:18px}
-.mbox .acts{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
-#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,16px);background:var(--ink);color:#fff;font-size:13.5px;font-weight:600;padding:10px 16px;border-radius:9px;opacity:0;transition:all .3s var(--ease);z-index:90;pointer-events:none}
+.mbox .acts{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px;margin-top:10px}
+.srow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-top:1px solid var(--line);font-size:14px}
+.srow b{display:block;color:var(--ink)}.srow small{color:var(--text-faint);font-size:12.5px}.srow .g{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));max-width:calc(100vw - 32px);text-align:center;transform:translate(-50%,16px);background:var(--ink);color:#fff;font-size:13.5px;font-weight:600;padding:10px 16px;border-radius:9px;opacity:0;transition:all .3s var(--ease);z-index:90;pointer-events:none}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 .menu{padding:6px;min-width:190px}
 .menu button{display:block;width:100%;text-align:left;padding:8px 10px;border-radius:7px;font-size:13.5px;color:var(--text-strong)}
@@ -225,9 +228,24 @@ textarea.ta:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary
 #net[hidden]{display:none}
 @keyframes spin{to{transform:rotate(360deg)}}.ib.spin svg{animation:spin 1s linear infinite}
 @media (pointer:coarse){.search,textarea.ta,.mbox input{font-size:16px}.sw{width:42px;height:42px}}
+@media (max-width:1300px){.rd{--l:228px;--r:320px}.center{padding:0 28px}}
 @media (max-width:1100px){.rd,.rd.notoc{--l:0px;--r:340px}.rd.nopanel{--r:0px}.toc{display:none}.rd.showtoc .toc{display:block;position:fixed;left:0;width:280px;z-index:45;box-shadow:var(--shadow-window)}}
 @media (max-width:900px){.rd,.rd.nopanel,.rd.notoc{--l:0px;--r:0px}.kp,.rd.nopanel .kp{display:flex;position:fixed;right:0;top:56px;width:min(380px,100%);z-index:44;box-shadow:var(--shadow-window);transform:translateX(105%);transition:transform .35s var(--ease)}.rd.showpanel .kp{transform:none}}
-@media (max-width:760px){.center{padding:0 18px}.wrap{padding:0 18px 80px}.hero h1,.connect h1{font-size:34px}.krowt{grid-template-columns:1fr 1fr 24px}.krowt>:nth-child(3),.krowt>:nth-child(4){display:none}.logo span{display:none}}
+@media (max-width:760px){.center{padding:0 18px}.wrap{padding:0 18px 80px}.hero h1,.connect h1{font-size:34px}.krowt{grid-template-columns:1fr 1fr 24px}.krowt>:nth-child(3),.krowt>:nth-child(4){display:none}.crumb>a,.crumb>span{display:none}}
+@media (max-width:640px){
+  #hdr{gap:2px;padding:0 6px 0 4px}.ib{width:38px;height:38px}
+  #aMinus,#aPlus,#pct,#status,.rd #syncBtn{display:none}
+  .crumb b{font-size:15px}
+  .center{padding:0 20px}
+  .chap{padding:44px 0 32px}.opener{margin-bottom:26px}.opener h2{font-size:1.75em}
+  #reader .k-h{font-size:1.1em;margin-top:1.6em}
+  .kp,.rd.nopanel .kp{width:100%}
+  .rd.showtoc .toc{width:86%}
+  .hero{padding:40px 0 24px}.sh{margin:40px 0 12px}
+  .cover{height:150px}.grid{grid-template-columns:1fr}
+  .connect{margin-top:6vh}
+  .mbox{padding:20px}.mbox .acts .btn{flex:1;justify-content:center}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -316,7 +334,7 @@ function download(name,text,type){const a=document.createElement('a');a.href=URL
 let stT;function status(t){const s=$('#status');if(!s)return;s.textContent=t;s.style.opacity=1;clearTimeout(stT);stT=setTimeout(()=>s.style.opacity=0,2600)}
 
 /* ---------- modal / toast ---------- */
-function ask(title,body,btns,input){return new Promise(res=>{const M=$('#modal');
+function ask(title,body,btns,input){return new Promise(res=>{const M=$('#modal');$('#mbox').onclick=null;
   $('#mbox').innerHTML=`<h3>${esc(title)}</h3>${body?`<p>${esc(body)}</p>`:''}${input?`<input id="min" value="${esc(input.value||'')}" spellcheck="false"><div class="err" id="merr"></div>`:''}<div class="acts">${btns.map(([l,v,c],i)=>`<button class="btn ${c||'out'}" data-i="${i}">${esc(l)}</button>`).join('')}</div>`;
   M.classList.add('open');const inp=$('#min');if(inp){inp.focus();inp.select()}
   const done=v=>{if(input&&v!=null){const er=input.check(inp.value.trim());if(er){$('#merr').textContent=er;return}v=inp.value.trim()}M.classList.remove('open');res(v)};
@@ -337,6 +355,7 @@ function header(){const h=$('#hdr');
     <button class="btn sm ghost" id="aMinus" title="Smaller text">A−</button><button class="btn sm ghost" id="aPlus" title="Larger text">A+</button><button class="ib ${pref('panel')===false?'':'on'}" id="pnlBtn" title="Knowtes panel">${ICON.panel}</button><button class="ib" id="syncBtn" title="Sync now">${ICON.sync}</button><button class="ib" id="setBtn" title="Settings">${ICON.gear}</button>`}
   const sb=$('#setBtn');if(sb)sb.onclick=settings;const sy=$('#syncBtn');if(sy)sy.onclick=syncNow;
   if(BK){$('#aMinus').onclick=()=>size(-1);$('#aPlus').onclick=()=>size(1);$('#pnlBtn').onclick=togglePanel;$('#tocBtn').onclick=toggleToc;$('#tocBtn').classList.toggle('on',pref('toc')!==false&&innerWidth>1100)}}
+document.addEventListener('click',e=>{const rd=$('.rd');if(!rd||!(rd.classList.contains('showpanel')||rd.classList.contains('showtoc')))return;if(e.target.closest('.kp,.toc,#hdr,.float,.ov'))return;rd.classList.remove('showpanel','showtoc')},true);
 function togglePanel(){const rd=$('.rd');if(innerWidth<=900){rd.classList.toggle('showpanel');return}const on=!rd.classList.contains('nopanel');pref('panel',!on);rd.classList.toggle('nopanel',on);$('#pnlBtn').classList.toggle('on',!on)}
 function toggleToc(){const rd=$('.rd');if(innerWidth<=1100){rd.classList.toggle('showtoc');return}const on=!rd.classList.contains('notoc');pref('toc',!on);rd.classList.toggle('notoc',on);$('#tocBtn').classList.toggle('on',!on)}
 function size(d){const s=Math.min(24,Math.max(14,(pref('size')||18)+d));pref('size',s);document.documentElement.style.setProperty('--size',s+'px')}
@@ -360,11 +379,21 @@ function connect(failed){BK=null;header();const c=CFG();
     if(!r||!r.ok){$('#ghGo').textContent='Connect';toast(r?(r.status===404?'Repository not found for this token':'GitHub said '+r.status):'Could not reach GitHub');return}
     LIB.books=[];LIB.knotes=[];if(await refresh()){location.hash='#/';route()}else{$('#ghGo').textContent='Connect';toast('Connected, but the library could not be read')}}}
 async function syncNow(){const b=$('#syncBtn');if(b)b.classList.add('spin');status('Syncing…');flushAll();const ok=await refresh();if(b)b.classList.remove('spin');if(ok){rerender();status('Up to date');toast('Library up to date')}else toast('Could not reach GitHub')}
-async function settings(){const v=await ask('Settings',`Library: ${REPO()}. Sync pulls the latest books and knowtes from GitHub (it also happens when you open the app). Disconnect removes the token and offline copy from this browser only; your files on GitHub stay.`,[['Close',null],['Sync now','sync','out'],['Change token','tok','out'],['Disconnect','off','pri']]);
-  if(v==='sync')syncNow();
-  if(v==='tok'){location.hash='';connect()}
-  if(v==='off'){if(LIB.knotes.some(k=>k.dirty)&&!(await ask('Unsaved changes','Some changes have not reached GitHub yet. Disconnect anyway?',[['Cancel',null],['Disconnect','y','pri']])))return;
-    await kvSet('lib:'+REPO(),null);pref('gh',null);LIB.books=[];LIB.knotes=[];location.hash='';connect()}}
+function settings(){const M=$('#modal');const sz=()=>pref('size')||18;
+  const draw=()=>{$('#mbox').innerHTML=`<h3>Settings</h3>
+   <div class="srow"><div><b>Library</b><small>${esc(REPO())}</small></div><div class="g"><button class="btn sm out" data-s="sync">${ICON.sync} Sync now</button></div></div>
+   <div class="srow"><div><b>Text size</b><small class="num">${sz()}px</small></div><div class="g"><button class="btn sm out" data-s="minus">A−</button><button class="btn sm out" data-s="plus">A+</button></div></div>
+   <div class="srow"><div><b>Access token</b><small>Stored only in this browser</small></div><div class="g"><button class="btn sm out" data-s="tok">Change</button><button class="btn sm ghost" data-s="off" style="color:var(--danger)">Disconnect</button></div></div>
+   <div class="acts"><button class="btn pri" data-s="close">Done</button></div>`};
+  draw();M.classList.add('open');
+  $('#mbox').onclick=async e=>{const b=e.target.closest('[data-s]');if(!b)return;const a=b.dataset.s;
+    if(a==='minus'||a==='plus'){size(a==='plus'?1:-1);draw();return}
+    M.classList.remove('open');$('#mbox').onclick=null;
+    if(a==='sync')syncNow();
+    if(a==='tok'){location.hash='';connect()}
+    if(a==='off'){if(LIB.knotes.some(k=>k.dirty)&&!(await ask('Unsaved changes','Some changes have not reached GitHub yet. Disconnect anyway?',[['Cancel',null],['Disconnect','y','pri']])))return;
+      if(!(await ask('Disconnect this browser?','The token and the offline copy are removed from this browser. Your files on GitHub stay as they are.',[['Cancel',null],['Disconnect','y','pri']])))return;
+      await kvSet('lib:'+REPO(),null);pref('gh',null);LIB.books=[];LIB.knotes=[];location.hash='';connect()}}}
 
 /* ---------- library ---------- */
 const knotesOf=(id,all)=>LIB.knotes.filter(k=>k.data.book===id&&(all||!k.data.hidden));let showHid=false;
