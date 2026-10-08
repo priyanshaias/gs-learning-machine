@@ -23,8 +23,8 @@
   --optional-soft:#fcebd9;--optional:#d9731a;--optional-ink:#8a4510;--ifos-soft:#dcefea;--ifos:#1f8a70;--ifos-ink:#155e4d;
   --interview-soft:#efe6fb;--interview:#7c4ddb;--interview-ink:#51308f;--danger:#c2410c;--highlight:#fff1b8;--note-paper:#fffdf6;--note-edge:#efe8d2;
   /* highlight fills: yellow = system highlight, green = prelims, purple = interview; pink is an extension (no pink in the system) */
-  --hl-y:#ffec9e;--hl-g:#cfe9d5;--hl-p:#fbd5e3;--hl-v:#e4d8f8;
-  --dot-y:#e0a800;--dot-g:#2f9e44;--dot-p:#d6336c;--dot-v:#7c4ddb;
+  --hl-y:#ffec9e;--hl-g:#cfe9d5;--hl-p:#f8d3ec;--hl-v:#e4d8f8;--hl-r:#ffd2c9;
+  --dot-y:#e0a800;--dot-g:#2f9e44;--dot-p:#c2257e;--dot-v:#7c4ddb;--dot-r:#d92d20;
   --sans:"Schibsted Grotesk","Helvetica Neue",Helvetica,sans-serif;--serif:Fraunces,Georgia,serif;
   --shadow-card:0 0 0 1px rgba(25,25,24,.05),0 12px 30px -16px rgba(25,25,24,.12);
   --shadow-stack:0 0 0 1px rgba(25,25,24,.06),0 10px 24px -14px rgba(25,25,24,.25);
@@ -80,12 +80,12 @@ a{color:var(--link);text-decoration:none}a:hover{color:var(--link-hover)}
 .chip{height:24px;padding:0 9px;border-radius:999px;background:var(--surface-sunken);font-size:12px;font-weight:600;color:var(--text-body);display:inline-flex;align-items:center;gap:6px}
 .chip.none{background:none;border:1px dashed var(--border-strong);color:var(--text-faint)}
 .ktable{border:1px solid var(--border);border-radius:14px;overflow:hidden}
-.krowt{display:grid;grid-template-columns:1.3fr 1.4fr 1.2fr .8fr 24px;gap:16px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line);color:inherit;font-size:14px;transition:background .15s}
+.krowt{display:grid;grid-template-columns:1.2fr 1.2fr 1.6fr .7fr 24px;gap:16px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line);color:inherit;font-size:14px;transition:background .15s}
 .krowt:last-child{border-bottom:0}.krowt:hover{background:var(--surface-inset);color:inherit}
 .krowt.head{font-size:12px;font-weight:600;color:var(--text-faint);padding:10px 18px;background:var(--surface-inset)}
 .krowt.head:hover{background:var(--surface-inset)}
 .kname{font-weight:700;color:var(--ink)}
-.counts{display:flex;gap:12px;font-size:12.5px;color:var(--text-body)}
+.counts{display:flex;flex-wrap:wrap;gap:10px;font-size:12.5px;color:var(--text-body)}
 .counts span{display:inline-flex;align-items:center;gap:5px}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--d);display:inline-block;flex:none}
 .foot{margin-top:40px;padding:20px 22px;border-radius:14px;background:var(--surface-muted);font-size:14px;color:var(--text-body);line-height:1.6}
@@ -135,9 +135,9 @@ a{color:var(--link);text-decoration:none}a:hover{color:var(--link-hover)}
 .para.flash{animation:flash 1.6s ease}
 @keyframes flash{0%,40%{background:var(--primary-soft)}100%{background:transparent}}
 mark.hl{color:inherit;border-radius:3px;padding:.08em 0;-webkit-box-decoration-break:clone;box-decoration-break:clone;cursor:pointer;transition:filter .2s}
-mark.y{background:var(--hl-y)}mark.g{background:var(--hl-g)}mark.p{background:var(--hl-p)}mark.v{background:var(--hl-v);font-weight:600}
+mark.y{background:var(--hl-y)}mark.g{background:var(--hl-g)}mark.p{background:var(--hl-p)}mark.v{background:var(--hl-v);font-weight:600}mark.r{background:var(--hl-r)}
 mark.other{background:none;text-decoration:underline 3px;text-underline-offset:3px;text-decoration-skip-ink:none}
-mark.other.y{text-decoration-color:var(--dot-y)}mark.other.g{text-decoration-color:var(--dot-g)}mark.other.p{text-decoration-color:var(--dot-p)}mark.other.v{text-decoration-color:var(--dot-v)}
+mark.other.y{text-decoration-color:var(--dot-y)}mark.other.g{text-decoration-color:var(--dot-g)}mark.other.p{text-decoration-color:var(--dot-p)}mark.other.v{text-decoration-color:var(--dot-v)}mark.other.r{text-decoration-color:var(--dot-r)}
 mark.hl:hover,mark.hl.hot{filter:brightness(.94) saturate(1.3)}
 mark.hl.note::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ink);margin-left:3px;vertical-align:.5em}
 .cnotes{margin-top:40px;padding:20px 22px;border-radius:14px;background:var(--note-paper);border:1px solid var(--note-edge)}
@@ -272,9 +272,9 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const nowISO=()=>new Date().toISOString();
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const fmtDate=s=>{const d=new Date(s);return s&&!isNaN(d)?d.toLocaleDateString(undefined,{day:'numeric',month:'short'}):''};
-const VERSION='2026-10-08.3';
-const COL={y:{label:'Mildly important',d:'var(--dot-y)'},g:{label:'More important',d:'var(--dot-g)'},p:{label:'Life-changing',d:'var(--dot-p)'},v:{label:'Key term',d:'var(--dot-v)'}};
-const ORDER=['y','g','p','v'];
+const VERSION='2026-10-09.1';
+const COL={y:{label:'Mildly important',d:'var(--dot-y)'},g:{label:'More important',d:'var(--dot-g)'},p:{label:'Life-changing',d:'var(--dot-p)'},v:{label:'Key term',d:'var(--dot-v)'},r:{label:'Question',d:'var(--dot-r)'}};
+const ORDER=['y','g','p','v','r'];
 const COVERS=[['var(--mains-soft)','var(--mains-ink)'],['var(--prelims-soft)','var(--prelims-ink)'],['var(--optional-soft)','var(--optional-ink)'],['var(--interview-soft)','var(--interview-ink)'],['var(--ifos-soft)','var(--ifos-ink)']];
 const WPP=300,PINKMAX=4;
 const ICON={colL:'<svg viewBox="0 0 24 24"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/></svg>',colR:'<svg viewBox="0 0 24 24"><path d="M13 17l5-5-5-5M6 17l5-5-5-5"/></svg>',gear:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',sync:'<svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 1-15.5 6.2M3 12A9 9 0 0 1 18.5 5.8"/><path d="M18.5 2v3.8h-3.8M5.5 22v-3.8h3.8"/></svg>',back:'<svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>',panel:'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16"/></svg>',toc:'<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',check:'<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',more:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>',note:'<svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4z"/></svg>'};
@@ -418,7 +418,7 @@ function showLibrary(){BK=null;header();document.title='GS Learning Machine';
     <div class="bmeta">${b.data.subtitle?`<div class="sub">${esc(b.data.subtitle)}</div>`:''}<div class="track"><i style="width:${pct}%"></i></div><div class="st num">${pct}% read · ${pg} pages · ${b.data.chapters.filter(c=>c.kind==='chapter').length||b.data.chapters.length} chapters</div>
     <div class="chips">${ks.length?ks.map(k=>`<span class="chip">${esc(k.data.name)}</span>`).join(''):'<span class="chip none">No knowtes yet</span>'}</div></div></a>`}).join('')}</div>`:`<div class="empty"><b>No books yet</b>Put a book JSON file in the books folder.</div>`}
   <div class="sh">Knowtes <span>${nk}</span></div>
-  ${nk?`<div class="ktable"><div class="krowt head"><span>Name</span><span>Book</span><span>Highlights</span><span>Updated</span><span></span></div>${shown.map(k=>{const b=LIB.books.find(x=>x.id===k.data.book);const c={y:0,g:0,p:0,v:0};k.data.highlights.forEach(h=>c[h.c]=(c[h.c]||0)+1);
+  ${nk?`<div class="ktable"><div class="krowt head"><span>Name</span><span>Book</span><span>Highlights</span><span>Updated</span><span></span></div>${shown.map(k=>{const b=LIB.books.find(x=>x.id===k.data.book);const c={y:0,g:0,p:0,v:0,r:0};k.data.highlights.forEach(h=>c[h.c]=(c[h.c]||0)+1);
     return `<a class="krowt" href="${b?'#/book/'+encodeURIComponent(b.slug):'#/'}" data-open="${esc(k.data.name)}"><span class="kname">${esc(k.data.name)}${k.data.hidden?' <span class="pill grey">Hidden</span>':''}</span><span>${b?esc(b.data.title):'<i>Book not found</i>'}</span><span class="counts num">${ORDER.map(x=>`<span style="--d:${COL[x].d}"><i class="dot"></i>${c[x]}</span>`).join('')}</span><span class="num" style="color:var(--text-faint);font-size:13px">${fmtDate(k.data.updated)}</span><span style="color:var(--text-faint)">→</span></a>`}).join('')}</div>`:`<div class="empty"><b>No knowtes yet</b>Open a book and start highlighting. Your first knowte is created for you.</div>`}
   ${nh?`<button class="hidlink" id="libHid">${showHid?'Hide':'Show'} ${nh} hidden knowte${nh>1?'s':''}</button>`:''}
   <div class="foot">Books and knowtes live in <code>${esc(REPO())}</code> on GitHub. To add a book, put its JSON file in <code>books/</code>. Every save is a commit, so any knowte can be rolled back from its history.</div></div>`;
@@ -517,14 +517,14 @@ async function create(c,withNote){const s=pend;closeFloats();getSelection().remo
     let a=g.s,b=g.e,notes=[];ex.forEach(h=>{a=Math.min(a,h.s);b=Math.max(b,h.e);if(h.note)notes.push(h.note);k.deleted.add(h.id)});k.data.highlights=k.data.highlights.filter(h=>!ex.includes(h));
     const id=uid();k.data.highlights.push({id,pid:g.pid,s:a,e:b,c,text:paraEl[g.pid].textContent.slice(a,b),note:notes.join('\n\n'),t:nowISO()});lastId=id}
   pref('lastC',c);touch(k);buildIdx();new Set(s.segs.map(g=>g.pid)).forEach(renderPara);renderPanel();
-  if(withNote||c==='v')setTimeout(()=>openPop(lastId,true),20);else toast(COL[c].label+' · '+k.data.name)}
+  if(withNote||c==='v'||c==='r')setTimeout(()=>openPop(lastId,true),20);else toast(COL[c].label+' · '+k.data.name)}
 function findH(id){for(const k of LIB.knotes){const h=k.data.highlights.find(x=>x.id===id);if(h)return{h,k}}return null}
 function onReaderClick(e){const m=e.target.closest('mark.hl');if(m&&getSelection().isCollapsed){e.stopPropagation();openPop(m.dataset.id)}}
 function openPop(id,focus){closeFloats();const f=findH(id);if(!f)return;const{h}=f;const list=(IDX.get(h.pid)||[]).filter(x=>x.h.s<h.e&&x.h.e>h.s);
   const mine=list.find(x=>x.k.data.name===ACT);const others=list.filter(x=>x!==mine);
   pop=document.createElement('div');pop.className='float';pop.id='pop';
   pop.innerHTML=(mine?`<div class="swr">${ORDER.map(c=>`<button class="sw ${c===mine.h.c?'cur':''}" data-c="${c}" style="--d:${COL[c].d}"><i></i><span class="tip">${COL[c].label}</span></button>`).join('')}<span>${COL[mine.h.c].label}</span></div>
-    <div class="q">“${esc(mine.h.text)}”</div><textarea class="ta" placeholder="${mine.h.c==='v'?'Define this term in your own words…':'Why does this matter?'}">${esc(mine.h.note||'')}</textarea>
+    <div class="q">“${esc(mine.h.text)}”</div><textarea class="ta" placeholder="${mine.h.c==='v'?'Define this term in your own words…':mine.h.c==='r'?'What is your question? What would answer it?':'Why does this matter?'}">${esc(mine.h.note||'')}</textarea>
     <div class="row"><span class="meta">${esc(ACT)} · p. ${pageOf(mine.h.pid)}</span><span><button class="btn sm ghost" data-del>Remove</button> <button class="btn sm pri" data-done>Done</button></span></div>`:`<div class="q">“${esc(h.text)}”</div>`)+
     (others.length?`<div class="also" ${mine?'':'style="border:0;margin:0;padding:0"'}>${others.map(x=>`<div class="a"><i class="dot" style="--d:${COL[x.h.c].d};margin-top:6px"></i><div style="flex:1"><b>${esc(x.k.data.name)}</b> · ${COL[x.h.c].label}${x.h.note&&x.h.note.trim()?`<span class="nt">${esc(x.h.note)}</span>`:''}</div>${ACT?`<button class="btn sm soft" data-copy="${x.h.id}">Copy to ${esc(ACT)}</button>`:''}</div>`).join('')}</div>`:'');
   const m=$(`mark[data-id="${id}"]`);place(pop,(m||paraEl[h.pid]).getBoundingClientRect(),true);
@@ -535,7 +535,7 @@ function openPop(id,focus){closeFloats();const f=findH(id);if(!f)return;const{h}
     if(e.target.closest('[data-done]')){closeFloats();renderPara(h.pid);renderPanel()}
     const cp=e.target.closest('[data-copy]');if(cp){const src=others.find(x=>x.h.id===cp.dataset.copy).h;const k=K(ACT);k.data.highlights.filter(x=>x.pid===src.pid&&x.s<src.e&&x.e>src.s).forEach(x=>k.deleted.add(x.id));k.data.highlights=k.data.highlights.filter(x=>!(x.pid===src.pid&&x.s<src.e&&x.e>src.s));k.data.highlights.push(Object.assign({},src,{id:uid(),t:nowISO()}));touch(k);closeFloats();buildIdx();renderPara(src.pid);renderPanel();toast('Copied to '+ACT)}}}
 addEventListener('keydown',e=>{if(e.target.closest('textarea,input'))return;if(e.key==='Escape'){closeFloats();$('#modal').classList.remove('open')}
-  if(pal&&/^[1-4]$/.test(e.key)){e.preventDefault();create(ORDER[+e.key-1])}if(pal&&e.key.toLowerCase()==='n'){e.preventDefault();create(pref('lastC')||'y',true)}});
+  if(pal&&/^[1-5]$/.test(e.key)){e.preventDefault();create(ORDER[+e.key-1])}if(pal&&e.key.toLowerCase()==='n'){e.preventDefault();create(pref('lastC')||'y',true)}});
 
 /* ---------- knowtes ---------- */
 const slug=()=>BK.slug.toLowerCase().replace(/[^a-z0-9-]+/g,'-');
@@ -558,9 +558,10 @@ async function deleteKnote(k){if(!k)return;
     LIB.knotes=LIB.knotes.filter(x=>x!==k);try{localStorage.removeItem('gslm2:'+pendKey(k))}catch(e){}
     VIS=VIS.filter(n=>n!==k.data.name);if(ACT===k.data.name)ACT=VIS[0]||null;saveVis();await saveCache();renderAll();renderPanel();status('Deleted');toast(k.data.name+' deleted')}
   catch(e){status('Not deleted');toast('Could not delete: '+e.message)}}
-function exportMD(k){const CO={y:['quote','Mildly important'],g:['success','More important'],p:['danger','Life-changing'],v:['abstract','Key term']};const qq=s=>s.split('\n').map(l=>'> '+l).join('\n');
+function exportMD(k){const CO={y:['quote','Mildly important'],g:['success','More important'],p:['danger','Life-changing'],v:['abstract','Key term'],r:['question','Question']};const qq=s=>s.split('\n').map(l=>'> '+l).join('\n');
   const hs=k.data.highlights.filter(h=>P[h.pid]).sort((a,b)=>P[a.pid].w0-P[b.pid].w0||a.s-b.s);
   let o=`---\nknowte: ${k.data.name}\nbook: "${BK.data.title}"\nauthor: "${BK.data.author}"\nexported: ${nowISO().slice(0,10)}\n---\n\n# ${BK.data.title} · ${k.data.name}\n\n`;
+  const qs=hs.filter(h=>h.c==='r');if(qs.length)o+='## Open questions\n\n'+qs.map(h=>`- [ ] ${h.text.trim()}${h.note?' — '+h.note.replace(/\n+/g,' '):''} *(p. ${pageOf(h.pid)})*`).join('\n')+'\n\n';
   const terms=hs.filter(h=>h.c==='v');if(terms.length)o+='## Key terms\n\n'+terms.map(h=>`- **${h.text.trim()}**${h.note?': '+h.note.replace(/\n+/g,' '):''}`).join('\n')+'\n\n';
   CH.forEach(c=>{const ch=hs.filter(h=>CH[P[h.pid].ci]===c&&h.c!=='v'),cn=k.data.chapterNotes[c.key];if(!ch.length&&!cn)return;o+=`## ${c.label!==c.title?c.label+': ':''}${c.title}\n\n`;
     ch.forEach(h=>{o+=`> [!${CO[h.c][0]}] ${CO[h.c][1]} · p. ${pageOf(h.pid)}\n${qq(h.text)}\n${h.note&&h.note.trim()?'>\n'+qq('**Note:** '+h.note.trim())+'\n':''}\n`});if(cn)o+=`### My notes\n\n${cn.trim()}\n\n`});
