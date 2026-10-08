@@ -232,7 +232,8 @@ textarea.ta:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary
 .fi:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
 #net{position:sticky;top:56px;z-index:39;background:var(--optional-soft);color:var(--optional-ink);font-size:13px;font-weight:600;padding:8px 20px;text-align:center}
 #net[hidden]{display:none}
-body.touch #reader .para{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body.touch,body.touch *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body.touch input,body.touch textarea,body.touch [contenteditable]{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
 ::highlight(gs-sel){background-color:#bcd6f5;color:inherit}
 @keyframes spin{to{transform:rotate(360deg)}}.ib.spin svg{animation:spin 1s linear infinite}
 @media (pointer:coarse){.search,textarea.ta,.mbox input{font-size:16px}.sw{width:42px;height:42px}}
@@ -271,6 +272,7 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const nowISO=()=>new Date().toISOString();
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const fmtDate=s=>{const d=new Date(s);return s&&!isNaN(d)?d.toLocaleDateString(undefined,{day:'numeric',month:'short'}):''};
+const VERSION='2026-10-08.3';
 const COL={y:{label:'Mildly important',d:'var(--dot-y)'},g:{label:'More important',d:'var(--dot-g)'},p:{label:'Life-changing',d:'var(--dot-p)'},v:{label:'Key term',d:'var(--dot-v)'}};
 const ORDER=['y','g','p','v'];
 const COVERS=[['var(--mains-soft)','var(--mains-ink)'],['var(--prelims-soft)','var(--prelims-ink)'],['var(--optional-soft)','var(--optional-ink)'],['var(--interview-soft)','var(--interview-ink)'],['var(--ifos-soft)','var(--ifos-ink)']];
@@ -392,6 +394,7 @@ function settings(){const M=$('#modal');const sz=()=>pref('size')||18;
    <div class="srow"><div><b>Library</b><small>${esc(REPO())}</small></div><div class="g"><button class="btn sm out" data-s="sync">${ICON.sync} Sync now</button></div></div>
    <div class="srow"><div><b>Text size</b><small class="num">${sz()}px</small></div><div class="g"><button class="btn sm out" data-s="minus">A−</button><button class="btn sm out" data-s="plus">A+</button></div></div>
    <div class="srow"><div><b>Access token</b><small>Stored only in this browser</small></div><div class="g"><button class="btn sm out" data-s="tok">Change</button><button class="btn sm ghost" data-s="off" style="color:var(--danger)">Disconnect</button></div></div>
+   <div class="srow"><div><b>App version</b><small class="num">${VERSION}</small></div></div>
    <div class="acts"><button class="btn pri" data-s="close">Done</button></div>`};
   draw();M.classList.add('open');
   $('#mbox').onclick=async e=>{const b=e.target.closest('[data-s]');if(!b)return;const a=b.dataset.s;
@@ -498,7 +501,8 @@ document.addEventListener('touchmove',e=>{if(!ts)return;const t=e.touches[0];ts.
 function tsEnd(e){if(!ts)return;clearTimeout(ts.timer);cancelAnimationFrame(asT);const was=ts.active;ts=null;if(!was||!tsRange)return;if(e&&e.cancelable)e.preventDefault();
   const r=tsRange;showPal(r);tsRange=r;drawTouchSel();if(!pref('tipTouch')){pref('tipTouch',1);toast('Tip: press and hold, then drag to select more')}}
 document.addEventListener('touchend',tsEnd,{passive:false});document.addEventListener('touchcancel',()=>{if(ts){clearTimeout(ts.timer);cancelAnimationFrame(asT);ts=null;clearTouchSel()}});
-document.addEventListener('contextmenu',e=>{if(TOUCH&&e.target.closest('#reader'))e.preventDefault()});
+document.addEventListener('contextmenu',e=>{if(TOUCH&&!e.target.closest('input,textarea'))e.preventDefault()});
+document.addEventListener('selectstart',e=>{if(!TOUCH)return;const el=e.target.nodeType===1?e.target:e.target.parentElement;if(!el||!el.closest('input,textarea'))e.preventDefault()});
 function copySel(){const t=pend?pend.segs.map(g=>paraEl[g.pid].textContent.slice(g.s,g.e)).join('\n\n'):'';closeFloats();if(t&&navigator.clipboard)navigator.clipboard.writeText(t).then(()=>toast('Copied'),()=>toast('Could not copy'))}
 document.addEventListener('mousedown',e=>{if(pop&&!e.target.closest('#pop,mark.hl'))closeFloats();if(!e.target.closest('.menu,[data-menu]'))$$('.float.menu').forEach(m=>m.remove())});
 async function ensureActive(){if(ACT&&K(ACT))return K(ACT);
